@@ -1,8 +1,9 @@
 #!/usr/bin/env ruby
 
-
+require 'net/http'
 require 'net/https'
 require 'optparse'
+require 'json'
 
 options = {}
 OptionParser.new do |opts|
@@ -25,10 +26,17 @@ https.use_ssl = true
 
 resp, data = nil
 
-https.start do |https|
-	req = Net::HTTP::Get.new('/rooms.json')
-	req.basic_auth options[:token], 'x'
-	resp, data = https.request(req)
-end
+req = Net::HTTP::Get.new('/rooms.json')
+req.basic_auth options[:token], 'x'
+resp, data = https.request(req)
 
+value = JSON.parse(data)
+p value["rooms"][0]["id"]
+
+request_path = "/room/#{value['rooms'][0]['id']}/uploads.json"
+puts request_path
+req = Net::HTTP::Get.new(request_path)
+req.basic_auth options[:token], 'x'
+resp, data = https.request(req)
 puts data
+
