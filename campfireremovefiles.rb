@@ -33,14 +33,15 @@ def choose_room(https, token)
 	resp, data = https.request(req)
 
 	value = JSON.parse(data)
-
-	puts "Choose the room you want to delete the files from: "
-	value['rooms'].each_with_index do |room, index|
-		puts "#{index}: #{room['name']}"
+	room_index = 0
+	if value['rooms'].length > 1
+		puts "Choose the room you want to delete the files from: "
+		value['rooms'].each_with_index do |room, index|
+			puts "#{index}: #{room['name']}"
+		end
+		puts "#{value['rooms'].length}: All"
+		room_index = gets.chomp.to_i
 	end
-	puts "#{value['rooms'].length}: All"
-	room_index = gets.chomp.to_i
-
 	if room_index == value['rooms'].length
 		puts "This will delete all files in all rooms!  Are you sure? (y/n)"
 		if gets.chomp != 'y'
