@@ -23,37 +23,49 @@ end.parse!
 
 https = Net::HTTP.new(options[:server], 443)
 https.use_ssl = true
-
-resp, data = nil
-
-req = Net::HTTP::Get.new('/rooms.json')
-req.basic_auth options[:token], 'x'
-resp, data = https.request(req)
-
-value = JSON.parse(data)
-p value["rooms"][0]["id"]
+begin
+	https.start
 
 
-while true
-	request_path = "/room/#{value['rooms'][0]['id']}/uploads.json"
-	puts request_path
-	req = Net::HTTP::Get.new(request_path)
+
+	req = Net::HTTP::Get.new('/rooms.json')
 	req.basic_auth options[:token], 'x'
 	resp, data = https.request(req)
 
-	files = JSON.parse(data)
+	value = JSON.parse(data)
+	p value["rooms"][0]["id"]
 
-	uploads = files["uploads"]
 
-	break if uploads.length == 0
-
-	uploads.each do |upload|
-		puts "#{upload["name"]} : #{upload["id"]}"
-		request_path = "/upload/delete/#{upload['id']}"
+	while true
+		request_path = "/room/#{value['rooms'][0]['id']}/uploads.json"
 		puts request_path
-		req = Net::HTTP::Post.new(request_path)
+		req = Net::HTTP::Get.new(request_path)
 		req.basic_auth options[:token], 'x'
 		resp, data = https.request(req)
-		p resp
+
+		files = JSON.parse(data)
+
+		uploads = files["uploads"]
+
+		break if uploads.length == 0
+
+		uploads.each do |upload|
+			puts "#{upload["name"]} : #{upload["id"]}"
+			request_path = "/upload/delete/#{upload['id']}"
+			puts request_path
+			req = Net::HTTP::Post.new(request_path)
+			req.basic_auth options[:token], 'x'
+			resp, data = https.request(req)
+			p resp
+		end
 	end
+	https.finish
+rescue SocketError => e
+	puts "Cannot connect to server #{options[:server]}"
+rescue => e
+	puts e.message
+	raise e
+ensure
+	https.finish
 end
+
