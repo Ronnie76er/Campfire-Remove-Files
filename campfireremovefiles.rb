@@ -37,11 +37,13 @@ def choose_room(https, token)
 	if value['rooms'].length > 1
 		puts "Choose the room you want to delete the files from: "
 		value['rooms'].each_with_index do |room, index|
+			index = index + 1
 			puts "#{index}: #{room['name']}"
 		end
-		puts "#{value['rooms'].length}: All"
-		room_index = gets.chomp.to_i
+		puts "#{value['rooms'].length + 1}: All"
+		room_index = gets.chomp.to_i - 1
 	end
+	
 	if room_index == value['rooms'].length
 		puts "This will delete all files in all rooms!  Are you sure? (y/n)"
 		if gets.chomp != 'y'
