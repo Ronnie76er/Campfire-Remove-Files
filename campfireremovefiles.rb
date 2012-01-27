@@ -55,6 +55,7 @@ def choose_room(https, token)
 		raise "Invalid Room choice"
 	else
 		puts "This will delete all files in the room #{value['rooms'][room_index]['name']}!!  Are you sure? (y/n)"
+		print "? "
 		if gets.chomp != 'y'
 			exit
 		end

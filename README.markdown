@@ -19,8 +19,8 @@ Sample run:
 	2: Test 1
 	3: Test 2
 	4: All
-	2
+	? 2
 	This will delete all files in the room Test 1!!  Are you sure? (y/n)
-	y
+	? y
 	Deleting test2.txt
 	Deleting test1.txt
