@@ -41,6 +41,7 @@ def choose_room(https, token)
 			puts "#{index}: #{room['name']}"
 		end
 		puts "#{value['rooms'].length + 1}: All"
+		print "? "
 		room_index = gets.chomp.to_i - 1
 	end
 	
