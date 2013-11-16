@@ -1,6 +1,6 @@
 Simply deletes all the files in your campfire rooms.
 
-Requires Ruby 1.8.7 
+Requires Ruby 2.0.0 (or greater)
 
 Usage:
 

@@ -32,8 +32,7 @@ def choose_room(https, token)
 	req = Net::HTTP::Get.new('/rooms.json')
 	req.basic_auth token, 'x'
 	resp, data = https.request(req)
-
-	value = JSON.parse(data)
+	value = JSON.parse(resp.body)
 	room_index = 0
 	if value['rooms'].length > 1
 		puts "Choose the room you want to delete the files from: "
@@ -83,7 +82,7 @@ begin
 			req.basic_auth options[:token], 'x'
 			resp, data = https.request(req)
 
-			files = JSON.parse(data)
+			files = JSON.parse(resp.body)
 
 			uploads = files["uploads"]
 
