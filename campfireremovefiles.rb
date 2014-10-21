@@ -75,6 +75,8 @@ begin
 
 	room_ids = choose_room(https, options[:token])
 
+	count = 1
+
 	room_ids.each do |room_id|
 		while true
 			request_path = "/room/#{room_id}/uploads.json"
@@ -94,6 +96,13 @@ begin
 				req = Net::HTTP::Post.new(request_path)
 				req.basic_auth options[:token], 'x'
 				resp, data = https.request(req)
+
+				count = count + 1
+
+				if count % 50 == 0
+					puts "Waiting for campfire to let us delete more files"
+					sleep 11
+				end
 			end
 		end
 	end
@@ -106,4 +115,3 @@ rescue => e
 ensure
 	https.finish
 end
-
